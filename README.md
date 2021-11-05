@@ -1,6 +1,12 @@
-# Sensirion I2C SGP41 Driver
+# Sensirion SGP41 Driver
+Platform agnostic Rust device driver for Sensirion SGP41.
 
-This library provides an embedded `no_std` driver for the [Sensirion SGP41 sensor](https://www.sensirion.com/en/environmental-sensors/gas-sensors/sgp41/). This driver was built using [embedded-hal](https://docs.rs/embedded-hal/) traits. The implementaion is based on [scd4x](https://github.com/hauju/scd4x-rs.git).
+[![Build status][workflow-badge]][workflow]
+[![Crates.io Version][crates-io-badge]][crates-io]
+[![Crates.io Downloads][crates-io-download-badge]][crates-io-download]
+![No Std][no-std-badge]
+
+This library provides an embedded `no_std` driver for the [Sensirion SGP41 sensor](https://www.sensirion.com/en/environmental-sensors/gas-sensors/sgp41/). This driver was built using [embedded-hal](https://docs.rs/embedded-hal/) traits. The implementaion is based on [scd4x](https://github.com/hauju/scd4x-rs.git) and [sgp40-rs](https://github.com/mjaakkol/sgp40-rs.git).
 
 ## Sensirion SGP41
 
@@ -17,7 +23,8 @@ cargo run --example linux
 
 ## Development Status
 
-The driver is in an early development state.
+The driver is in an development and testing state.  
+VOC index scale and NOx index scale not implemented yet.
 
 ## License
 
