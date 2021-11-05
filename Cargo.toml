@@ -1,0 +1,20 @@
+[package]
+name = "sgp41"
+version = "0.1.0"
+edition = "2021"
+authors = ["Egor Markov <mark_ee@live.com>"]
+documentation = "https://docs.rs/sgp41"
+repository = "https://github.com/aectaan/sgp41"
+license = "MIT OR Apache-2.0"
+description = "Rust driver for the Sensirion SGP41 series. VOC and NOx Sensor."
+keywords = ["sgp41", "sensirion", "driver", "embedded-hal-driver"]
+categories = ["embedded", "no-std"]
+readme = "README.md"
+
+[dependencies]
+sensirion-i2c = "0.1"
+embedded-hal = "0.2"
+
+[dev-dependencies]
+linux-embedded-hal = "0.3"
+embedded-hal-mock = "0.8"
