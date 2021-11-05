@@ -30,10 +30,10 @@ where
     }
 
     /// This command starts the conditioning, i.e., the VOC pixel will be
-    /// operated at the same temperature as it is by calling the
-    /// sgp41_measure_raw_signals  command  while  the  NOx  pixel  will
+    /// operated at the default temperature and humidity (+25 deg.C, 50% rH) as it is by calling the
+    /// measure_raw command  while  the  NOx  pixel  will
     /// be  operated  at  a  different  temperature  for  conditioning.  This
-    /// command returns only the measured raw signal of the VOC pixel SRAW_VOC as 2 bytes (+ 1 CRC byte).
+    /// command returns only the measured raw signal of the VOC pixel SRAW_VOC as u16.
     pub fn execute_conditioning(&mut self) -> Result<u16, Error<E>> {
         let mut buf = [0; 3];
         self.read_cmd_args(Command::ExecuteConditioning, &[0x8000, 0x6666], &mut buf)?;
@@ -121,6 +121,10 @@ where
         self.write_cmd(Command::SoftReset)
     }
 
+    pub fn set_temperature_offset(&mut self, offset: i8) {
+        self.temperature_offset += offset as i16;
+    }
+
     /// Writes command without additional arguments.
     fn write_cmd(&mut self, cmd: Command) -> Result<(), Error<E>> {
         let (command, delay) = cmd.as_tuple();
@@ -171,5 +175,34 @@ where
         self.write_cmd_args(cmd, args)?;
         i2c::read_words_with_crc(&mut self.i2c, SGP41_I2C_ADDRESS, data)?;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use embedded_hal_mock as hal;
+
+    use self::hal::delay::MockNoop as DelayMock;
+    use self::hal::i2c::{Mock as I2cMock, Transaction};
+    use super::*;
+
+    /// Test the get_serial_number function
+    #[test]
+    fn test_get_serial_number() {
+        // Arrange
+        let (cmd, _) = Command::GetSerialNumber.as_tuple();
+        let expectations = [
+            Transaction::write(SGP41_I2C_ADDRESS, cmd.to_be_bytes().to_vec()),
+            Transaction::read(
+                SGP41_I2C_ADDRESS,
+                vec![0xbe, 0xef, 0x92, 0xbe, 0xef, 0x92, 0xbe, 0xef, 0x92],
+            ),
+        ];
+        let mock = I2cMock::new(&expectations);
+        let mut sensor = Sgp41::new(mock, DelayMock);
+        // Act
+        let serial = sensor.get_serial_number().unwrap();
+        // Assert
+        assert_eq!(serial, 0xbeefbeefbeef);
     }
 }
