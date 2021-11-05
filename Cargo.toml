@@ -1,6 +1,6 @@
 [package]
 name = "sgp41"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Egor Markov <mark_ee@live.com>"]
 documentation = "https://docs.rs/sgp41"
