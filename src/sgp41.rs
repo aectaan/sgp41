@@ -138,7 +138,7 @@ where
         let (command, delay) = cmd.as_tuple();
 
         let mut buf = [0; 8];
-        assert!(command.to_ne_bytes().len() + args.len() * 3 < buf.len());
+        assert!(command.to_ne_bytes().len() + args.len() * 3 <= buf.len());
 
         buf[0..2].copy_from_slice(&command.to_be_bytes());
 
